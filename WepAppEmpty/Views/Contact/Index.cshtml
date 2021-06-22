@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Liste des contacts";
+}
+@model IEnumerable<Contact>
+@* Html Helpers *@
+@*<a asp-action="Create" asp-controller="Contact">Ajouter un nouveau contact</a>*@
+
+    @* Ici j'utilise razor pour afficher foreach c'est ça qui me permet de faire les @using, @... bref c'est ça qui permet d'utiliser @ *@
+    
+<div id="contact-list">
+    @foreach (Contact c in Model)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@c.LastName @c.FirstName</h5>
+                <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Nom :</span><span>@c.LastName</span> </h6>
+                <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Prénom :</span><span>@c.FirstName</span> </h6>
+                <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Email :</span><span>@c.Email</span> </h6>
+                <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Catégorie :</span><span>@c.CategoryId</span> </h6>
+                <div>
+                    <!--<td>-->@*<a href="~/contact/details/@c.Id">Details</a>*@<!--</td>-->
+                    <a class="card-link" asp-action="Details" asp-controller="Contact" asp-area="" asp-route-id="@c.Id">Details</a>
+                    <a class="card-link" asp-action="Create" asp-controller="Contact" asp-area="" asp-route-id="@c.Id">Update</a>
+                    <a class="card-link" asp-action="Delete" asp-controller="Contact" asp-area="" asp-route-id="@c.Id">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+

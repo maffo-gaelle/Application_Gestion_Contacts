@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Editer un contact";
+}
+@model EditContactForm
+@*Ici je définis que mon model est un CreateContactForm*@
+
+
+<!--Il s'agit ici du HtmlHelpers qui ne contient que de méthodes d'extension dont le but est d'aider à créer un formulaire-->
+<div>
+    @Html.ValidationSummary(false)
+</div>
+<div asp-validation-summary="All">
+    @Html.ValidationSummary(false)
+</div>
+<h2>Modifier un contact</h2>
+<form action="~/Contact/Edit" method="post">
+    <div style="display: none">
+        <label asp-for="Id"></label>
+        <input asp-for="Id" class="form-control" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" readonly/>
+    </div>
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" />
+        <div>
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" />
+        <div>
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback" />
+        <div>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div>
+        <label asp-for="CategoryId"></label>
+        <select asp-for="CategoryId" asp-items="Model.Categories">
+            <!--Model.Categories est l'attribut Categories du formulaire qui est envoyé dans ma méthode create pour afficher le formulaire dans le controller -->
+            <option value="0" disabled>Choisir une catégorie</option>
+        </select>
+        @*<div>
+                <select name="CategoryId" class="form-control">
+                    <option value="3">Choisir une catégorie</option>
+                    <option value="1">Professionnel</option>
+                    <option value="2">Personnel</option>
+                </select>
+            </div>*@
+    </div>
+
+    <div id="btn">
+        <button type="submit" class="btn btn-lg">Modifier Contact</button>
+        <a asp-action="Index" asp-controller="Contact" class="btn btn-lg">Annuler</a>
+    </div>
+</form>
