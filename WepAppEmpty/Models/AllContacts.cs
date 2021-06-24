@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Model.Client;
+using Model.Client.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;

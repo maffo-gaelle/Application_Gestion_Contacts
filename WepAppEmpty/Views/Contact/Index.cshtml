@@ -1,12 +1,17 @@
-﻿@{
-    ViewBag.Title = "Liste des contacts";
-}
-@model IEnumerable<Contact>
-@* Html Helpers *@
-@*<a asp-action="Create" asp-controller="Contact">Ajouter un nouveau contact</a>*@
+﻿@model IEnumerable<Contact>
 
-    @* Ici j'utilise razor pour afficher foreach c'est ça qui me permet de faire les @using, @... bref c'est ça qui permet d'utiliser @ *@
-    
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<a asp-action="Create" asp-controller="Contact">Ajouter un nouveau contact</a>
+
+@* Ici j'utilise razor pour afficher foreach c'est ça qui me permet de faire les @using, @... bref c'est ça qui permet d'utiliser @ *@
 <div id="contact-list">
     @foreach (Contact c in Model)
     {
@@ -17,6 +22,8 @@
                 <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Prénom :</span><span>@c.FirstName</span> </h6>
                 <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Email :</span><span>@c.Email</span> </h6>
                 <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Catégorie :</span><span>@c.CategoryId</span> </h6>
+                <!--<h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">-->@*User :*@<!--</span><span>@c.CategoryId</span> </h6>-->
+
                 <div>
                     <!--<td>-->@*<a href="~/contact/details/@c.Id">Details</a>*@<!--</td>-->
                     <a class="card-link" asp-action="Details" asp-controller="Contact" asp-area="" asp-route-id="@c.Id">Details</a>
@@ -28,5 +35,58 @@
     }
 
 </div>
-
-
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>*@

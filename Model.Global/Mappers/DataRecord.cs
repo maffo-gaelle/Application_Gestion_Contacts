@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Model.Global.Data;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace WepAppEmpty.Models.Mappers
+namespace Model.Global.Mappers
 {
     public static class DataRecord
     {
-        public static Contact ToContact(this IDataRecord record)
+        internal static Contact ToContact(this IDataRecord record)
         {
             return new Contact()
             {
@@ -16,30 +18,32 @@ namespace WepAppEmpty.Models.Mappers
                 FirstName = (string)record["FirstName"],
                 LastName = (string)record["LastName"],
                 Email = (string)record["Email"],
-                CategoryId = (int)record["CategoryId"]
+                CategoryId = (int)record["CategoryId"],
+                UserId = (int)record["UserId"]
             };
         }
 
-        public static User ToUser(this IDataRecord record)
+        internal static User ToUser(this IDataRecord record)
         {
             return new User()
             {
-                id = (int)record["ID"],
-                FirstName = (string)record["FirstName"],
+                Id = (int)record["Id"],
                 LastName = (string)record["LastName"],
+                FirstName = (string)record["FirstName"],
                 Email = (string)record["Email"],
-                //BirthDate = (DbNull)record["BirthDate"],
-                Passwd = (string)record["Passwd"]
+                //On ne renvoie jamais un mot de passe d'une base de données
+                Passwd = null, 
+                IsAdmin = (bool)record["IsAdmin"]
             };
         }
 
-        public static Category ToCategory(this IDataRecord record)
+        internal static Category ToCategory(this IDataRecord record)
         {
             return new Category()
             {
                 Id = (int)record["ID"],
                 Name = (string)record["Name"],
-                
+
             };
         }
     }

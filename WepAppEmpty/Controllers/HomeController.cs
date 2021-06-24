@@ -1,30 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Model.Client.Repositories;
+using Model.Client.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WepAppEmpty.Models;
-using WepAppEmpty.Services;
 
 namespace WepAppEmpty.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ContactService _contactService;
+        private readonly IContactRepository _contactRepository;
 
-        public HomeController(ContactService contactService)
+        public HomeController(IContactRepository contactRepository)
         {
-            _contactService = contactService;
+            _contactRepository = contactRepository;
         }
         public IActionResult Index()
         {
-            AllContacts vm = new AllContacts();
-
-            vm.Personnels = _contactService.GetPersonnalCategory();
-            vm.Professionnal = _contactService.GetProfessionnalCategory();
-            vm.Autres = _contactService.GetOthersCategory();
-            vm.GetAllContacts = _contactService.Get();
-            vm.cpt = 1;
+            AllContacts vm = new()
+            {
+                Personnels = _contactRepository.GetPersonnalCategory(),
+                Professionnal = _contactRepository.GetProfessionnalCategory(),
+                Autres = _contactRepository.GetOthersCategory(),
+                GetAllContacts = _contactRepository.Get(),
+                cpt = 1
+            };
 
             return View(vm);
         }

@@ -29,12 +29,22 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" asp-action="Create" asp-controller="Contact">Add Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" asp-action="Login" asp-controller="Auth">Se connecter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" asp-action="Signup" asp-controller="Auth">S'inscrire</a>
-                    </li>
+                    @if (sessionManager.User is null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" asp-action="Login" asp-controller="Auth">Se connecter</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" asp-action="Signup" asp-controller="Auth">S'inscrire</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" asp-action="Logout" asp-controller="Auth">@sessionManager.User.LastName (Logout)</a>
+                        </li>
+                    }
+
                 </ul>
             </div>
         </div>

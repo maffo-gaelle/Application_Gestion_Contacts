@@ -1,22 +1,28 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Model.Client.Data;
+using Model.Client.Repositories;
+using Model.Client.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WepAppEmpty.Models;
 using WepAppEmpty.Models.Forms;
-using WepAppEmpty.Services;
+using WepAppEmpty.Models.Sessions;
 
 namespace WepAppEmpty.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly UserService _userService;
+        private readonly IAuthRepository _authRepository;
+        private readonly ISessionManager _sessionManager;
 
-        public AuthController(UserService userService)
+        public AuthController(IAuthRepository authRepository, ISessionManager sessionManager)
         {
-            _userService = userService;
+            _authRepository = authRepository;
+            _sessionManager = sessionManager;
         }
 
         public IActionResult Index()
@@ -37,28 +43,34 @@ namespace WepAppEmpty.Controllers
             if(!ModelState.IsValid)
                 return View(form);
 
-            User user = _userService.Get(form.Email);
+            User user = _authRepository.Login(form.Email, form.Passwd);
 
 
-            if (user == null)
+            if (user is null)
             {
-                ViewBag.ErrorEmail = ("Cet email n'existe pas");
+                //ModelState.AddModelError("", "L'email ou le mot de passe ne sont pas valide");
+                ViewBag.ErrorPasswd = ("Le mot de passe n'est pas valide");
                 return View(form);
             }
 
-            if (user.Passwd != form.Passwd)
+            //Ici on met l'utilisateur connecté dans la session
+            HttpContext.Session.SetInt32("id", user.Id);
+            HttpContext.Session.SetString("email", user.Email);
+            HttpContext.Session.SetString("email", user.LastName);
+
+            //Ici recuperer la session pour envoyer à notre vue
+            //ViewBag.Id = HttpContext.Session.GetInt32(user.id.ToString());
+            //ViewBag.Nom = HttpContext.Session.GetString(user.LastName);
+            //ViewBag.Email = HttpContext.Session.GetString(user.Email);
+
+            _sessionManager.User = new UserSession
             {
-                ViewBag.ErrorPasswd = ("Le mot de passe est incorrect");
-                return View(form);
-            }
-
-            HttpContext.Session.SetInt32("id", user.id);
-            ViewBag.Id = HttpContext.Session.GetInt32(user.id.ToString());
-            ViewBag.Nom = HttpContext.Session.GetString(user.LastName);
-            ViewBag.Email = HttpContext.Session.GetString(user.Email);
-
-
-
+                Id = user.Id,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                Email = user.Email,
+                IsAdmin = user.IsAdmin
+            };
             return RedirectToAction("Index", "Home");
         }
 
@@ -75,30 +87,18 @@ namespace WepAppEmpty.Controllers
             if (!ModelState.IsValid)
                 return View(form);
 
-            User newUser = new User()
-            {
-                LastName = form.LastName,
-                FirstName = form.FirstName,
-                Email = form.Email,
-                BirthDate = form.BirthDate,
-                Passwd = form.Passwd
-            };
+            User newUser = new User(form.LastName, form.FirstName, form.Email, form.Passwd);
 
-            bool create = _userService.Create(newUser);
-            if(create)
-            {
-                User user = _userService.Get(newUser.Email);
-                HttpContext.Session.SetInt32("id", user.id);
-                ViewBag.Id = HttpContext.Session.GetInt32(user.id.ToString());
-                ViewBag.Nom = HttpContext.Session.GetString(user.LastName);
-                ViewBag.Email = HttpContext.Session.GetString(user.Email);
-            } else
-            {
-                ViewBag.ErrorCreate = "Une erreur est survenue dans le serveur. Veuillez réessayer plus tard !";
-                return View(form);
-            }
+            _authRepository.Register(newUser);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Logout()
+        {
+            _sessionManager.Clear();
+
+            return RedirectToAction("Index");
         }
     }
 }

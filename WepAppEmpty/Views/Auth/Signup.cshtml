@@ -1,4 +1,4 @@
-﻿@model CreateUserForm
+﻿@model WepAppEmpty.Models.Forms.CreateUserForm
 
 @{
     ViewData["Title"] = "Signup";
@@ -10,6 +10,7 @@
 <div class="row">
     <div class="col-md-4">
         <form action="~/Auth/Signup" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
@@ -26,11 +27,6 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" />
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Passwd" class="control-label"></label>
                 <input asp-for="Passwd" class="form-control" />
                 <span asp-validation-for="Passwd" class="text-danger"></span>
@@ -41,18 +37,13 @@
                 <span asp-validation-for="PasswdConfirm" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-            <div>
-                <span class="text-danger">@ViewBag.ErrorCreate</span>
+                <input type="submit" value="S'inscrire" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" asp-controller="Home">Annuler</a>
-    <a asp-action="Index" >Se connecter</a>
-
+    <a asp-action="Index">Back to List</a>
 </div>
 

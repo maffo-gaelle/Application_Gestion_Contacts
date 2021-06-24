@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Model.Client.Data;
+using Model.Client.Repositories;
+using Model.Client.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WepAppEmpty.Models;
-using WepAppEmpty.Services;
 
 namespace WepAppEmpty.Infracstructures.UserValidations
 {
@@ -12,13 +14,23 @@ namespace WepAppEmpty.Infracstructures.UserValidations
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            IAuthRepository _authRepository = (IAuthRepository)validationContext.GetService(typeof(IAuthRepository));
+            
             string email = value as string;
-            UserService userService = (UserService)validationContext.GetService(typeof(UserService));
-            User user = userService.Get()
-                                   .Where(e => e.Email == email)
-                                   .FirstOrDefault();
 
-            return (user == null) ? ValidationResult.Success : new ValidationResult("Cet email existe déjà");
+            if(!string.IsNullOrWhiteSpace(email))
+            {
+                if(_authRepository.EmailExists(email))
+                {
+                    return new ValidationResult("Cet email existe déjà !");
+                }
+            } else
+            {
+                return new ValidationResult("Email invalide");
+            }
+
+            return ValidationResult.Success;
         }
+
     }
 }

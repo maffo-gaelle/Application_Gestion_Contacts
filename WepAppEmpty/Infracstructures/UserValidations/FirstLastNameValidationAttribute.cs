@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Model.Client.Data;
+using Model.Client.Repositories;
+using Model.Client.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using WepAppEmpty.Models;
 using WepAppEmpty.Models.Forms;
-using WepAppEmpty.Services;
 
 namespace WepAppEmpty.Infracstructures.UserValidations
 {
@@ -20,11 +22,11 @@ namespace WepAppEmpty.Infracstructures.UserValidations
             Console.WriteLine("Le lastName du formulaire est " + lastName);
 
 
-            UserService _userService = (UserService)validationContext.GetService(typeof(UserService));
-            User user = _userService.Get()
+            IAuthRepository _authRepository = (IAuthRepository)validationContext.GetService(typeof(IAuthRepository));
+            User user = _authRepository.Get()
                                     .Where(c => c.FirstName == firstName && c.LastName == lastName)
                                     .FirstOrDefault();
-            if(user != null)
+            if (user != null)
             {
                 Console.WriteLine("Le firstname de la bd est " + user.FirstName);
                 Console.WriteLine("Le lastName de la bd est " + user.LastName);

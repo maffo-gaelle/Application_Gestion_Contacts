@@ -26,7 +26,6 @@ namespace WepAppEmpty.Models.Forms
         [EmailAddress]
         [EmailExistValidation]
         [DisplayName("Email : ")]
-        [DataType(DataType.Text)]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Un mot de passe est réquis")]
@@ -36,13 +35,12 @@ namespace WepAppEmpty.Models.Forms
         [DataType(DataType.Password)]
         public string Passwd { get; set; }
 
-        [PasswordConfirm]
         [DisplayName("Confirmez votre mot de passe : ")]
         [Required(ErrorMessage = "Veuillez confirmer votre mot de passe")]
         [DataType(DataType.Password)]
+        [Compare(nameof(Passwd))]
         public string PasswdConfirm { get; set; }
 
-        [DataType(DataType.DateTime)]
-        public DateTime? BirthDate { get; set; }
+        
     }
 }

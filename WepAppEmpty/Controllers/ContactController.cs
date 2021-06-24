@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Model.Client;
+using Model.Client.Data;
+using Model.Client.Repositories;
+using Model.Client.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,51 +13,51 @@ using System.Text;
 using System.Threading.Tasks;
 using WepAppEmpty.Models;
 using WepAppEmpty.Models.Forms;
-using WepAppEmpty.Services;
+using WepAppEmpty.Models.Sessions;
 
 namespace WepAppEmpty.Controllers
 {
     public class ContactController : Controller
     {
+        private readonly ISessionManager _sessionManager;
+        private readonly IContactRepository _contactRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        private readonly ContactService _contactService;
-        private readonly CategoryService _categoryService;
-
-        public ContactController(ContactService contactService, CategoryService categoryService)
+        public ContactController(IContactRepository contactService, ICategoryRepository categoryService, ISessionManager sessionManager)
         {
-            _contactService = contactService;
-            _categoryService = categoryService;
+            _contactRepository = contactService;
+            _categoryRepository = categoryService;
+            _sessionManager = sessionManager;
         }
 
         public IActionResult Index()
         {
+            var contacts = _contactRepository.Get();
 
-            return View(_contactService.Get());
+            return View(contacts);
         }
     
-        //public IActionResult GetByCategory(int id)
-        //{
-
-        //    return View(_contactService.GetByCategory(id));
-        //}
-
         public IActionResult Details(int id)
         {
 
-            return View(_contactService.Get(id));
+            return View(_contactRepository.Get(id));
         }
         //J'ai besoin de deux methode create, la première c'est en get pour recuperer mon formulaire au server et l'afficher
         //La deuxième, c'est pour envoyer mon formulaire avec les données remplies. Elle contient l'attribut httpPost
         public IActionResult Create(int id)
         {
+            if (_sessionManager.User == null)
+                return RedirectToAction("Login", "Auth");
+
             CreateContactForm form = new CreateContactForm();
+
             //On ne peut pas envoyé directement les catégorie qu'on récupère ans la base de données à la vue
             //puisque ce que la vue doit affichée, ce sont des selectedItems
             form.Categories = GetCategories();
 
             if (id != 0)
             {
-                Contact contact = _contactService.Get(id);
+                Contact contact = _contactRepository.Get(id);
 
                 if (contact is null)
                     return RedirectToAction("Index");
@@ -73,6 +77,9 @@ namespace WepAppEmpty.Controllers
         [HttpPost]
         public IActionResult Create(CreateContactForm form)
         {
+
+            if (_sessionManager.User == null)
+                return RedirectToAction("Login", "Auth");
             //ValidationContext validationContext = new ValidationContext(form);
             //if (!ModelState.IsValid && form.Validate(validationContext).Count() != 0)
             if (!ModelState.IsValid)
@@ -83,17 +90,13 @@ namespace WepAppEmpty.Controllers
 
             if(form.Id == 0)
             {
-                Contact newcontact = new Contact();
+                Contact newcontact = new Contact(form.LastName, form.FirstName, form.Email, form.CategoryId, _sessionManager.User.Id);
 
-                newcontact.LastName = form.LastName;
-                newcontact.FirstName = form.FirstName;
-                newcontact.Email = form.Email;
-                newcontact.CategoryId = form.CategoryId;
-
-                _contactService.Create(newcontact);
-            } else
+                _contactRepository.Insert(newcontact);
+            } 
+            else
             {
-                Contact contact = _contactService.Get(form.Id);
+                Contact contact = _contactRepository.Get(form.Id);
                 contact.LastName = form.LastName;
                 contact.FirstName = form.FirstName;
                 if (contact.Email != form.Email)
@@ -102,7 +105,7 @@ namespace WepAppEmpty.Controllers
                 }
                 contact.CategoryId = form.CategoryId;
 
-                _contactService.UpdateContact(contact);
+                _contactRepository.Update(form.Id, contact);
             }
 
             return RedirectToAction("Index");
@@ -111,7 +114,7 @@ namespace WepAppEmpty.Controllers
 
         public IActionResult Delete(int id)
         {
-            Contact contact = _contactService.Get(id);
+            Contact contact = _contactRepository.Get(id);
 
             if (contact is null)
                 return RedirectToAction("Index");
@@ -123,14 +126,14 @@ namespace WepAppEmpty.Controllers
         [HttpPost]
         public IActionResult Delete(int id, IFormCollection collection)
         {
-            _contactService.DeleteContact(id);
+            _contactRepository.Delete(id);
 
             return RedirectToAction("Index");
         }
 
         private IEnumerable<SelectListItem> GetCategories()
         {
-            IEnumerable<Category> categories = _categoryService.Get();
+            IEnumerable<Category> categories = _categoryRepository.Get();
 
             //Je récupère mes catégories de ma base de données que je transforme en selected items
             //qui seront envoyé à mon formulaire dans le select
