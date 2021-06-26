@@ -19,16 +19,16 @@ namespace WepAppEmpty.Controllers
         }
         public IActionResult Index()
         {
-            AllContacts vm = new()
-            {
-                Personnels = _contactRepository.GetPersonnalCategory(),
-                Professionnal = _contactRepository.GetProfessionnalCategory(),
-                Autres = _contactRepository.GetOthersCategory(),
-                GetAllContacts = _contactRepository.Get(),
-                cpt = 1
-            };
+            //AllContacts vm = new()
+            //{
+            //    Personnels = _contactRepository.GetPersonnalCategory(),
+            //    Professionnal = _contactRepository.GetProfessionnalCategory(),
+            //    Autres = _contactRepository.GetOthersCategory(),
+            //    GetAllContacts = _contactRepository.Get(),
+            //    cpt = 1
+            //};
 
-            return View(vm);
+            return View();
         }
     }
 }

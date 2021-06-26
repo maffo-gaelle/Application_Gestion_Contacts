@@ -39,5 +39,15 @@ namespace Model.Client.Services
         {
             return _authRepository.Get().Select(u => u.ToClient());
         }
+
+        public IEnumerable<Contact> GetContactByUser(int id)
+        {
+            return _authRepository.GetContactByUser(id).Select(u => u.ToClient());
+        }
+
+        public IEnumerable<Contact> getContactsByCategoryAndUser(int userId, int categoryId)
+        {
+            return _authRepository.getContactsByCategoryAndUser(userId, categoryId).Select(u => u.ToClient());
+        }
     }
 }

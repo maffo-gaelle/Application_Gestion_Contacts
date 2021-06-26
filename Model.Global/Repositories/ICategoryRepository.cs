@@ -8,5 +8,7 @@ namespace Model.Global.Repositories
         IEnumerable<Category> Get();
         Category Get(int id);
         bool Insert(Category category);
+        bool Delete(int id);
+        bool Update(int id, Category category);
     }
 }

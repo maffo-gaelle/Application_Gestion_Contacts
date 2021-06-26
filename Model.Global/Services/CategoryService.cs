@@ -40,5 +40,22 @@ namespace Model.Global.Services
 
             return _connection.ExecuteNonQuery(command) == 1;
         }
+
+        public bool Delete(int id)
+        {
+            Command command = new Command("BFSP_DeleteCategory", true);
+            command.AddParameter("Id", id);
+
+            return _connection.ExecuteNonQuery(command) == 1;
+        }
+
+        public bool Update(int id, Category category)
+        {
+            Command command = new Command("BFSP_UpdateCategory", true);
+            command.AddParameter("Id", id);
+            command.AddParameter("Name", category.Name);
+
+            return _connection.ExecuteNonQuery(command) == 1;
+        }
     }
 }

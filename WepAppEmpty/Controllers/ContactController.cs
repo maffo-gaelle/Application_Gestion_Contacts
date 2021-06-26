@@ -24,19 +24,28 @@ namespace WepAppEmpty.Controllers
         private readonly ISessionManager _sessionManager;
         private readonly IContactRepository _contactRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IAuthRepository _authRepository;
 
-        public ContactController(IContactRepository contactService, ICategoryRepository categoryService, ISessionManager sessionManager)
+        public ContactController(IContactRepository contactService, ICategoryRepository categoryService, IAuthRepository authRepository, ISessionManager sessionManager)
         {
             _contactRepository = contactService;
             _categoryRepository = categoryService;
+            _authRepository = authRepository;
             _sessionManager = sessionManager;
         }
 
         public IActionResult Index()
         {
-            var contacts = _contactRepository.Get();
 
-            return View(contacts);
+            Dictionary<string, IEnumerable<Contact>> allContacts = new Dictionary<string, IEnumerable<Contact>>();
+
+            foreach(Category category in _categoryRepository.Get())
+            {
+                var contacts = _authRepository.getContactsByCategoryAndUser(_sessionManager.User.Id, category.Id);
+                allContacts.Add(category.Name, contacts);
+            }
+
+            return View(allContacts);
         }
     
         public IActionResult Details(int id)

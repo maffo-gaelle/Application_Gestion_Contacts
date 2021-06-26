@@ -68,5 +68,15 @@ namespace Model.Global.Services
           
             return _connection.ExecuteReader(command, dr => dr.ToUser());
         }
+
+        public IEnumerable<Contact> getContactsByCategoryAndUser(int userId, int categoryId)
+        {
+            Command command = new Command("SELECT * From Contact WHERE UserId = @userId AND CategoryId = @categoryId", false);
+
+            command.AddParameter("UserId", userId);
+            command.AddParameter("CategoryId", categoryId);
+
+            return _connection.ExecuteReader(command, dr => dr.ToContact());
+        }
     }
 }

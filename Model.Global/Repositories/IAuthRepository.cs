@@ -11,5 +11,6 @@ namespace Model.Global.Repositories
         IEnumerable<Contact> GetContactByUser(int id);
         User Login(string email, string passwd);
         void Register(User entity);
+        IEnumerable<Contact> getContactsByCategoryAndUser(int userId, int categoryId);
     }
 }

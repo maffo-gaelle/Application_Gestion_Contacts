@@ -36,5 +36,15 @@ namespace Model.Client.Services
         {
             return _categoryRepository.Insert(category.ToGlobal());
         }
+
+        public bool Delete(int id)
+        {
+            return _categoryRepository.Delete(id);
+        }
+
+        public bool Update (int id, Category category)
+        {
+            return _categoryRepository.Update(id, category.ToGlobal());
+        }
     }
 }

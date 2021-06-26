@@ -14,5 +14,8 @@ namespace Model.Client.Repositories
         IEnumerable<User> Get();
         void Register(User entity);
         bool EmailExists(string email);
+
+        IEnumerable<Contact> GetContactByUser(int id);
+        IEnumerable<Contact> getContactsByCategoryAndUser(int userId, int categoryId);
     }
 }

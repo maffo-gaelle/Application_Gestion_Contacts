@@ -1,92 +1,38 @@
-﻿@model IEnumerable<Contact>
+﻿@model Dictionary<string, IEnumerable<Contact>>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Liste des contacts</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<a asp-action="Create" asp-controller="Contact">Ajouter un nouveau contact</a>
 
-@* Ici j'utilise razor pour afficher foreach c'est ça qui me permet de faire les @using, @... bref c'est ça qui permet d'utiliser @ *@
-<div id="contact-list">
-    @foreach (Contact c in Model)
-    {
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">@c.LastName @c.FirstName</h5>
-                <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Nom :</span><span>@c.LastName</span> </h6>
-                <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Prénom :</span><span>@c.FirstName</span> </h6>
-                <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Email :</span><span>@c.Email</span> </h6>
-                <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Catégorie :</span><span>@c.CategoryId</span> </h6>
-                <!--<h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">-->@*User :*@<!--</span><span>@c.CategoryId</span> </h6>-->
+@foreach (KeyValuePair<string, IEnumerable<Contact>> kvp in Model)
+{
+    <h3>@kvp.Key</h3>
+    <div id="contact-list">
+        @foreach (var value in kvp.Value)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@value.LastName @value.FirstName</h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Nom :</span><span>@value.LastName</span> </h6>
+                    <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Prénom :</span><span>@value.FirstName</span> </h6>
+                    <h6 class="card-subtitle mb-2 text-muted"><span class="title-attr">Email :</span><span>@value.Email</span> </h6>
 
-                <div>
-                    <!--<td>-->@*<a href="~/contact/details/@c.Id">Details</a>*@<!--</td>-->
-                    <a class="card-link" asp-action="Details" asp-controller="Contact" asp-area="" asp-route-id="@c.Id">Details</a>
-                    <a class="card-link" asp-action="Create" asp-controller="Contact" asp-area="" asp-route-id="@c.Id">Update</a>
-                    <a class="card-link" asp-action="Delete" asp-controller="Contact" asp-area="" asp-route-id="@c.Id">Delete</a>
+                    <div>
+                        <!--<td>-->@*<a href="~/contact/details/@c.Id">Details</a>*@<!--</td>-->
+                        <a class="card-link" asp-action="Details" asp-controller="Contact" asp-area="" asp-route-id="@value.Id">Details</a>
+                        <a class="card-link" asp-action="Create" asp-controller="Contact" asp-area="" asp-route-id="@value.Id">Update</a>
+                        <a class="card-link" asp-action="Delete" asp-controller="Contact" asp-area="" asp-route-id="@value.Id">Delete</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-
-</div>
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserId)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
         }
-    </tbody>
-</table>*@
+    </div>
+ }
+
+

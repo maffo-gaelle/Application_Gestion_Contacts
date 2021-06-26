@@ -1,0 +1,28 @@
+﻿@model CategoryStatut
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+@if (Model.ContactsByCategory.Count() != 0)
+{
+    <p>Impossible de supprimer cette catégorie, Car un ou plusieurs contacts y sont réliés. Veuillez tout d'abord supprimer les contacts.</p>
+    <a asp-action="Index">Retour à la Liste de catégories</a>
+}
+else
+{
+    <h3>Etes vous sûrs de vouloir supprimer la catégorie " @Model.category.Name "? Cette opération est irréversible !</h3>
+    <div>
+        <hr />
+
+
+        <form asp-action="Delete">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <a asp-action="Index">Back to List</a>
+        </form>
+    </div>
+
+}
+
