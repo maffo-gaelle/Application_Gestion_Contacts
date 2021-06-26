@@ -3,9 +3,13 @@
 @using Model.Client.Services
 @using Model.Client.Data
 @using WepAppEmpty.Infracstructures.Sessions
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-@inject ISessionManager sessionManager
 
+
+@* Vu que je suis dans l'aréa admin, je n'ai pas besoin d'injecter le sessionManager ou d'injecter la sessions puisque la seule personne qui peut se connecter à l'area admin, c'est l'admin *@
+@*@using WepAppEmpty.Infracstructures.Sessions
+    @inject ISessionManager sessionManager*@
 @* ViewImport, comme il setrouve dictement dans le dossier Vue, il va être lancé avant de lancer n'importe quelle autre vue.
     Ce qui fait que les using fait ci haut seront importer pour toutes les vue du dossier View*@

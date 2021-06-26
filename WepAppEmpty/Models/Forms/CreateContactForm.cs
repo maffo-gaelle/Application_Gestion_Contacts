@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using WepAppEmpty.Infracstructures.ContactValidations;
+using WepAppEmpty.Infracstructures.Validations.ContactValidations;
 
 namespace WepAppEmpty.Models.Forms
 {

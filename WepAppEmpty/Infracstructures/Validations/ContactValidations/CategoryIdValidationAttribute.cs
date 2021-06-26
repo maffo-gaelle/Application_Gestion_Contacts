@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WepAppEmpty.Infracstructures.ContactValidations
+namespace WepAppEmpty.Infracstructures.Validations.ContactValidations
 {
     public class CategoryIdValidationAttribute : ValidationAttribute
     {

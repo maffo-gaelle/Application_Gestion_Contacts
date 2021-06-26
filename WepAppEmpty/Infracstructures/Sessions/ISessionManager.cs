@@ -1,4 +1,4 @@
-﻿namespace WepAppEmpty.Models.Sessions
+﻿namespace WepAppEmpty.Infracstructures.Sessions
 {
     public interface ISessionManager
     {

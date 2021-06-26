@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WepAppEmpty.Models;
 using WepAppEmpty.Models.Forms;
 
-namespace WepAppEmpty.Infracstructures.UserValidations
+namespace WepAppEmpty.Infracstructures.Validations.UserValidations
 {
     public class PasswordConfirmAttribute : ValidationAttribute
     {

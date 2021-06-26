@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WepAppEmpty.Infracstructures.UserValidations
+namespace WepAppEmpty.Infracstructures.Validations.UserValidations
 {
     public class UnscribeValidationAttribute : ValidationAttribute
     {

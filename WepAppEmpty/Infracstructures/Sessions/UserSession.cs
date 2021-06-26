@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WepAppEmpty.Models.Sessions
+namespace WepAppEmpty.Infracstructures.Sessions
 {
     public class UserSession
     {

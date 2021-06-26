@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Model.Client.Data;
@@ -8,9 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WepAppEmpty.Infracstructures.Security;
+using WepAppEmpty.Infracstructures.Sessions;
 using WepAppEmpty.Models;
 using WepAppEmpty.Models.Forms;
-using WepAppEmpty.Models.Sessions;
 
 namespace WepAppEmpty.Controllers
 {
@@ -25,11 +27,14 @@ namespace WepAppEmpty.Controllers
             _sessionManager = sessionManager;
         }
 
+        [AnonymousRequired]
         public IActionResult Index()
         {
             return RedirectToAction("Login");
         }
 
+        //[AllowAnonymous] : Ceci permet d'être authentifié ou non pour utiliser la ressource. AllowAnonymous prend le pas sur tous les autre attribut
+        [AnonymousRequired]
         public IActionResult Login()
         {
             LoginForm form = new LoginForm();
@@ -38,6 +43,7 @@ namespace WepAppEmpty.Controllers
         }
 
         [HttpPost]
+        [AnonymousRequired]
         public IActionResult Login(LoginForm form)
         {
             if(!ModelState.IsValid)
@@ -49,7 +55,7 @@ namespace WepAppEmpty.Controllers
             if (user is null)
             {
                 //ModelState.AddModelError("", "L'email ou le mot de passe ne sont pas valide");
-                ViewBag.ErrorPasswd = ("Le mot de passe n'est pas valide");
+                ViewBag.ErrorPasswd = ("Le mot de passe est incorrect");
                 return View(form);
             }
 
@@ -74,6 +80,7 @@ namespace WepAppEmpty.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [AnonymousRequired]
         public IActionResult Signup()
         {
             CreateUserForm form = new CreateUserForm();
@@ -81,7 +88,9 @@ namespace WepAppEmpty.Controllers
             return View(form);
         }
 
+
         [HttpPost]
+        [AnonymousRequired]
         public IActionResult Signup(CreateUserForm form)
         {
             if (!ModelState.IsValid)
@@ -94,6 +103,7 @@ namespace WepAppEmpty.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [AuthRequired]
         public ActionResult Logout()
         {
             _sessionManager.Clear();

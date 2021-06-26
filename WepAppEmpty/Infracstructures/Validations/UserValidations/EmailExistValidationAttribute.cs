@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WepAppEmpty.Models;
 
-namespace WepAppEmpty.Infracstructures.UserValidations
+namespace WepAppEmpty.Infracstructures.Validations.UserValidations
 {
     public class EmailExistValidationAttribute : ValidationAttribute
     {

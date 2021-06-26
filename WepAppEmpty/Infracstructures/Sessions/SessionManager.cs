@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace WepAppEmpty.Models.Sessions
+namespace WepAppEmpty.Infracstructures.Sessions
 {
     //Va contenir nos variables sessions
     public class SessionManager : ISessionManager

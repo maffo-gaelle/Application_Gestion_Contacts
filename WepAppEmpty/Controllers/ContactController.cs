@@ -11,12 +11,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WepAppEmpty.Infracstructures.Security;
+using WepAppEmpty.Infracstructures.Sessions;
 using WepAppEmpty.Models;
 using WepAppEmpty.Models.Forms;
-using WepAppEmpty.Models.Sessions;
 
 namespace WepAppEmpty.Controllers
 {
+    [AuthRequired]//LE AuthRequired va me permettre de ne plus faire le test à chaque fois pour savoir si je suis authentifié au par car la classe AuthRequired le fait déjà
     public class ContactController : Controller
     {
         private readonly ISessionManager _sessionManager;
@@ -39,16 +41,12 @@ namespace WepAppEmpty.Controllers
     
         public IActionResult Details(int id)
         {
-
             return View(_contactRepository.Get(id));
         }
         //J'ai besoin de deux methode create, la première c'est en get pour recuperer mon formulaire au server et l'afficher
         //La deuxième, c'est pour envoyer mon formulaire avec les données remplies. Elle contient l'attribut httpPost
         public IActionResult Create(int id)
         {
-            if (_sessionManager.User == null)
-                return RedirectToAction("Login", "Auth");
-
             CreateContactForm form = new CreateContactForm();
 
             //On ne peut pas envoyé directement les catégorie qu'on récupère ans la base de données à la vue
@@ -77,9 +75,6 @@ namespace WepAppEmpty.Controllers
         [HttpPost]
         public IActionResult Create(CreateContactForm form)
         {
-
-            if (_sessionManager.User == null)
-                return RedirectToAction("Login", "Auth");
             //ValidationContext validationContext = new ValidationContext(form);
             //if (!ModelState.IsValid && form.Validate(validationContext).Count() != 0)
             if (!ModelState.IsValid)
